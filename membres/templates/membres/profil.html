@@ -15,11 +15,17 @@
 <div class="col-md-3"></div>
 
 <div class="col-md-6">
-<div class="profil panel panel-default">
+<div class="profil panel panel-default {% if user == user_object %}editable{% endif %}">
 	<div class="panel-heading clearfix text-center">
 		<h1>{{ user_object.profil.nom_courant }}</h1>
-		{% load gravatar %}
-		<img class="gravatar img-responsive center-block" src="{% gravatar_url user_object.email 128 %}" />
+		<div class="editable profile-picture">
+			{% load gravatar %}
+			{% if user == user_object %}
+			<div class="gravatar-edit">
+				<p><strong>Gravatar</strong> est un outil de gestion des avatars. L'avatar dépend de votre adresse mail. Pour modifier votre avatar, cliquez <a href="{% gravatar_profile_url user.email %}">ici</a>.</p>
+			</div>{% endif %}
+			<img class="gravatar img-responsive center-block" src="{% gravatar_url user_object.email 128 %}" />
+		</div>
 	</div>
 	<div class="panel-body">
 		<p><strong>Occupations :</strong></p>

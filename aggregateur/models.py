@@ -36,6 +36,7 @@ class Vote(models.Model):
 	def __str__(self): return self.color
 
 
+
 class Comment(models.Model):
 	content = models.TextField(max_length=10000)
 	author = models.ForeignKey(User)

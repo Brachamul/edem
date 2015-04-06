@@ -1,10 +1,10 @@
 Membres
 =======
 
-* Permettre la gestion de mandats JDem
-* Expliquer le fonctionnement de Gravatar
+* **Permettre la gestion de mandats JDem**
+* ~~Expliquer le fonctionnement de Gravatar~~
 * Afficher le statut d'adhesion
-* Afficher le profil par nom
+* URL du profil par nom
 
 
 
@@ -12,7 +12,7 @@ Membres
 Notifications
 ========
 
-* Mettre en place un système de notifications
+* **Mettre en place un système de notifications**
 
 
 
@@ -31,18 +31,19 @@ Aggrégateur d'actualité
 
 Posts
 -----
-* Mettre en place la pagination des posts
-* Recharger le score toutes les x minutes
+* **Mettre en place la pagination des posts**
+* **Recharger le score toutes les x minutes**
 * Ajouter un système d'illustration des posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
 
 Commentaires
 --------
-* Return to comment after new comment is submitted
+* **Return to comment after new comment is submitted**
 * Éditer les commentaires
 * Gérer le cas de descente à X niveaux de commentaires
 * Voter sur les commentaires
+* Supprimer son commentaire
 
 Chaînes
 -------
@@ -64,7 +65,7 @@ Authentification
 * Gérer la durée des sessions
 * Ignorer les caractères "espace" dans le code d'authentification
 * Make the "register" button on the "connexion" page remember the content of the email/number field
-* Enable email registration, currently there's only adherent number registration
+* **Enable email registration, currently there's only adherent number registration**
 * Mettre en place l'authentification par SMS
 * Ajouter du JS à l'authentification
 
@@ -74,7 +75,7 @@ Authentification
 Fichier Adhérents
 =================
 
-* Tester le chargement du fichier
+* **Tester le chargement du fichier**
 
 
 
@@ -90,9 +91,11 @@ Tableau de Bord
 Securité
 ========
 
-* Secure the settings.py file
+* **Secure the settings.py file**
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
+* Remove super login
+
 
 
 ***
@@ -107,4 +110,4 @@ Sites
 Meta
 ====
 
-* Retirer la DB des commits
+* ~~Retirer la DB des commits~~
