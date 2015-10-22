@@ -2,6 +2,7 @@
 
 <script>
 var spinner = '<div class=\"spinner\">\n  <div class=\"dot1\"><\/div>\n  <div class=\"dot2\"><\/div>\n<\/div>';
+var minispinner = '<div class=\"spinner mini-spinner\">\n  <div class=\"dot1\"><\/div>\n  <div class=\"dot2\"><\/div>\n<\/div>';
 </script>
 
 <style>
@@ -15,6 +16,8 @@ var spinner = '<div class=\"spinner\">\n  <div class=\"dot1\"><\/div>\n  <div cl
   -webkit-animation: rotate 2.0s infinite linear;
   animation: rotate 2.0s infinite linear;
 }
+
+.mini-spinner { display: inline-block; margin: .25em; width : 1em; height: 1em; }
 
 .dot1, .dot2 {
   width: 60%;

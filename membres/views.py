@@ -53,6 +53,4 @@ def process_profil_changes(request, user, profil) :
 
 	messages.success(request, "Vos modifications ont bien été prises en compte.")
 
-def form_test(request):
-	if request.method == 'POST': return HttpResponse('Truly, this was a %s.' % request.POST.get('potato'))
-	else : return HttpResponse('This was not a true potato.')
+def actorCard(request, pk): return render(request, 'actor.html', { 'actor': get_object_or_404(User, pk=pk), } )

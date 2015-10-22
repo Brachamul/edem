@@ -1,0 +1,143 @@
+{% extends "aggregateur/channel.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+{% endblock %}
+
+
+{% block primary_content %}
+
+	<main id="chatfeed" class="card card-big">
+
+		<!-- JS loaded messages here -->
+
+		<div id="loading-messages-spinner">
+			<div class="spinner mini-spinner"><div class="dot1"></div><div class="dot2"></div></div>
+		</div>
+
+		<p id="chat-no-activity" class="card-announcement">Pas d'activité récente dans ce chat, commencez en écrivant un message !</p>
+
+	</main>
+
+	{% include "chatrooms/new_message.html" %}
+
+	{% include "spinner.html" %}
+
+	<style>
+
+		#chatfeed { max-height: calc(100vh - 72px - 34px - 20px ); overflow-y: auto; position: relative; } /* menubar, message writing bar and its margins */
+		#secondary-wrapper .card { max-height: calc(100vh - 72px - 10px ); overflow-y: auto; } /* So that the chatfeed takes all vertical space, even if the sidebar is longer */
+		@media screen and (max-width: 767px) {
+			#chatfeed { max-height: calc(100vh - 70px - 34px - 20px - 34px - 6px ); } /* add the sidebar toggle button */
+		}
+		#chatfeed .message { margin: .65em 0; line-height: 1.35; font-size: .85em; }
+		#chatfeed .message .time, 
+		#chatfeed .message .author { color: #999;  }
+		#chatfeed .message .content {  }
+		#chat-no-activity { margin: 4em 0; }
+		div + div + #chat-no-activity { display: none; }
+		#loading-messages-spinner { text-align: center; }
+		footer.endpage { display: none; }
+
+	</style>
+
+{% endblock primary_content %}
+
+{% block scripts %} {{ block.super }}
+
+<script>
+// plugin to check if item is visible
+!function(t){var i=t(window);t.fn.visible=function(t,e,o){if(!(this.length<1)){var r=this.length>1?this.eq(0):this,n=r.get(0),f=i.width(),h=i.height(),o=o?o:"both",l=e===!0?n.offsetWidth*n.offsetHeight:!0;if("function"==typeof n.getBoundingClientRect){var g=n.getBoundingClientRect(),u=g.top>=0&&g.top<h,s=g.bottom>0&&g.bottom<=h,c=g.left>=0&&g.left<f,a=g.right>0&&g.right<=f,v=t?u||s:u&&s,b=t?c||a:c&&a;if("both"===o)return l&&v&&b;if("vertical"===o)return l&&v;if("horizontal"===o)return l&&b}else{var d=i.scrollTop(),p=d+h,w=i.scrollLeft(),m=w+f,y=r.offset(),z=y.top,B=z+r.height(),C=y.left,R=C+r.width(),j=t===!0?B:z,q=t===!0?z:B,H=t===!0?R:C,L=t===!0?C:R;if("both"===o)return!!l&&p>=q&&j>=d&&m>=L&&H>=w;if("vertical"===o)return!!l&&p>=q&&j>=d;if("horizontal"===o)return!!l&&m>=L&&H>=w}}}}(jQuery);
+</script>
+
+<script>
+
+url = "{% url 'chatroom_feed' channel.slug %}"
+
+timeOutCounter = 1800000 // 30 minutes in miliseconds
+refreshFrequency = 5000 // 5 seconds in miliseconds
+
+spawnedMessages = []
+
+fetchMessages()
+
+$('form.new-message').submit(function(){
+	$('#loading-messages-spinner .spinner').fadeIn('slow')
+	$.ajax({
+		data: $(this).serialize(), // Form data
+		type: $(this).attr('method'), // GET or POST
+		url: $(this).attr('action'), // URL action
+		success: function(response) {
+			$('#new-message-input').val("").focus()
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log(jqXHR.responseText)
+		}
+	})
+	return false; // cancel original submit event
+})
+
+function fetchMessages() {
+
+	var atBottom = false
+	if ($('#loading-messages-spinner').visible()) atBottom = true // If we're at the bottom of the chat div, let's follow it down
+
+	$.ajax({url: url,}).done(function(data) {
+		$('#loading-messages-spinner .spinner').fadeOut() /* Hide the loading spinner */
+		$.each(data.reverse(), function( i, message ) { 
+			if ( $.inArray(message.pk, spawnedMessages) == -1) spawnMessage(message) // if the message is not yet spawned, do it
+		});
+	});
+
+	if (atBottom === true) stayDown() 
+
+	timeOutCounter -= refreshFrequency
+	setTimeout(fetchMessages, refreshFrequency);
+
+}
+
+function spawnMessage(message) {
+	var pk = message.pk
+	var content = message.fields.content
+	var author = message.fields.author
+	var time = formatTime(message.fields.date)
+	message = '<div id="message-' + pk + '" class="message" style="display: none">' +
+		'<span class="time">' + time + '</span>' +
+		'<span class="author new" data-author="' + author + '"></span>' +
+		'<span class="content">' + content + '</span>' +
+		'</div>'
+	$('#loading-messages-spinner').before(message)
+	$('#message-' + pk).delay(150).fadeIn('slow') // delay to give time for loading user avatar
+	loadActorCards()
+	spawnedMessages.push(pk)
+}
+
+function formatTime(date) {
+	var date = new Date(date)
+	var hours = date.getHours()
+	var minutes = date.getMinutes()
+	if (hours < 10) hours = '0' + hours
+	if (minutes < 10) minutes = '0' + minutes
+	date = hours + ':' + minutes
+	return date
+}
+
+function loadActorCards() {
+	var url = "{% url 'membres' %}" 
+	$('.author.new').each(function(){
+		var authorBox = $(this)
+		$.ajax({url: url + $(this).attr('data-author') + '/card/' ,}).done(function(card) {
+			authorBox.html(card)
+		})
+	})
+}
+
+function stayDown(){ 
+	$('#chatfeed').stop().animate({ scrollTop: $("#chatfeed")[0].scrollHeight }, 2500);
+}
+
+</script>
+
+{% endblock scripts %}
+

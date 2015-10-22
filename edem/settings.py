@@ -38,6 +38,7 @@ INSTALLED_APPS = (
 	'mandats',
 	'notifications',
     'beta',
+    'chatrooms',
     'bootstrap3', # django-bootstrap3
 )
 

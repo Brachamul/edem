@@ -1,0 +1,10 @@
+<form class="new-message" method="POST" action="new/" enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="input-group">
+		<input id="new-message-input" class="form-control nofocus" type="text" name="message" maxlength="1024" placeholder="..." autofocus />
+		<span class="input-group-btn">
+			<button type="submit" class="btn btn-default"><i class="fa fa-send"></i></button>
+		</span>
+	</div>
+	<input type="hidden" name="channel_slug" value="{{ channel.slug }}">
+</form>

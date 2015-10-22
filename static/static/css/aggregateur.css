@@ -4,7 +4,9 @@
 #primary-wrapper, #secondary-wrapper { float: left; margin-left: 2%; }
 #primary-wrapper { width: 72%; }
 #secondary-wrapper { width: 22%; }
-
+@media screen and (max-width: 767px) {
+	#secondary-wrapper .card { overflow-y: scroll; max-height: calc(100vh - 78px);}
+}
 
 /* RÉACTIVITÉ */
 
